@@ -187,7 +187,7 @@ class _InputState extends State<Input> {
                                   color: InheritedChatTheme.of(context)
                                       .theme
                                       .inputTextColor
-                                      .withOpacity(0.5),
+                                      .withOpacity(0.8),
                                 ),
                         hintText:
                             InheritedL10n.of(context).l10n.inputPlaceholder,
