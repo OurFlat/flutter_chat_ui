@@ -12,7 +12,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_chat_types: ^2.1.1
+  flutter_chat_types:
+    git:
+      url: https://github.com/sarbogast/flutter_chat_types
+      ref: feature/audio_message_types
   flutter_link_previewer: ^1.0.5
   intl: ^0.17.0
   photo_view: ^0.11.1
@@ -26,12 +29,6 @@ dev_dependencies:
     sdk: flutter
   pedantic: ^1.11.0
 
-#TODO disable overrides before pull request
-dependency_overrides:
-  flutter_chat_types:
-    git:
-      url: https://github.com/sarbogast/flutter_chat_types
-      ref: feature/audio_message_types
 
 flutter:
   assets:
