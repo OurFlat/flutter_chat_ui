@@ -132,19 +132,16 @@ class DefaultChatTheme extends ChatTheme {
     String? attachmentButtonIcon,
     Color backgroundColor = const Color(0xffffffff),
     TextStyle body1 = const TextStyle(
-      fontFamily: 'Avenir',
       fontSize: 16,
       fontWeight: FontWeight.w500,
       height: 1.375,
     ),
     TextStyle body2 = const TextStyle(
-      fontFamily: 'Avenir',
       fontSize: 14,
       fontWeight: FontWeight.w400,
       height: 1.428,
     ),
     TextStyle caption = const TextStyle(
-      fontFamily: 'Avenir',
       fontSize: 12,
       fontWeight: FontWeight.w500,
       height: 1.333,
@@ -166,13 +163,11 @@ class DefaultChatTheme extends ChatTheme {
     Color secondaryTextColor = const Color(0xff1d1d21),
     String? sendButtonIcon,
     TextStyle subtitle1 = const TextStyle(
-      fontFamily: 'Avenir',
       fontSize: 16,
       fontWeight: FontWeight.w800,
       height: 1.375,
     ),
     TextStyle subtitle2 = const TextStyle(
-      fontFamily: 'Avenir',
       fontSize: 12,
       fontWeight: FontWeight.w800,
       height: 1.333,
@@ -226,19 +221,16 @@ class DarkChatTheme extends ChatTheme {
     String? attachmentButtonIcon,
     Color backgroundColor = const Color(0xff1f1c38),
     TextStyle body1 = const TextStyle(
-      fontFamily: 'Avenir',
       fontSize: 16,
       fontWeight: FontWeight.w500,
       height: 1.375,
     ),
     TextStyle body2 = const TextStyle(
-      fontFamily: 'Avenir',
       fontSize: 14,
       fontWeight: FontWeight.w400,
       height: 1.428,
     ),
     TextStyle caption = const TextStyle(
-      fontFamily: 'Avenir',
       fontSize: 12,
       fontWeight: FontWeight.w500,
       height: 1.333,
@@ -260,13 +252,11 @@ class DarkChatTheme extends ChatTheme {
     Color secondaryTextColor = const Color(0xffffffff),
     String? sendButtonIcon,
     TextStyle subtitle1 = const TextStyle(
-      fontFamily: 'Avenir',
       fontSize: 16,
       fontWeight: FontWeight.w800,
       height: 1.375,
     ),
     TextStyle subtitle2 = const TextStyle(
-      fontFamily: 'Avenir',
       fontSize: 12,
       fontWeight: FontWeight.w800,
       height: 1.333,
