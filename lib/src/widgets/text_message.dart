@@ -86,8 +86,8 @@ class TextMessage extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: 16,
+        horizontal: 12,
+        vertical: 10,
       ),
       child: _textWidget(_user, context),
     );

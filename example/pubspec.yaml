@@ -49,9 +49,7 @@ dependency_overrides:
       url: https://github.com/sarbogast/flutter_chat_types
       ref: feature/audio_message_types
   flutter_chat_ui:
-    git:
-      url: https://github.com/sarbogast/flutter_chat_ui
-      ref: feature/audio_message
+    path: ../
   flutter_link_previewer:
     git:
       url: https://github.com/OurFlat/flutter_link_previewer
