@@ -16,7 +16,10 @@ dependencies:
     git:
       url: https://github.com/sarbogast/flutter_chat_types
       ref: feature/audio_message_types
-  flutter_link_previewer: ^1.0.5
+  flutter_link_previewer:
+    git:
+      url: https://github.com/OurFlat/flutter_link_previewer
+      ref: main
   intl: ^0.17.0
   photo_view: ^0.11.1
   flutter_sound: ^8.1.1
