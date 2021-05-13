@@ -190,7 +190,10 @@ class Message extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          _showAvatarOrPlaceholder(_user),
+          Padding(
+            padding: EdgeInsets.only(bottom: shouldRenderTime ? 25 : 0),
+            child: _showAvatarOrPlaceholder(_user),
+          ),
           ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: messageWidth.toDouble(),
