@@ -3,6 +3,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/src/widgets/audio_message.dart';
 import 'package:intl/intl.dart';
 
+import 'chat.dart';
 import 'file_message.dart';
 import 'image_message.dart';
 import 'inherited_chat_theme.dart';
@@ -24,8 +25,8 @@ class Message extends StatelessWidget {
     this.onPreviewDataFetched,
     required this.previousMessageSameAuthor,
     required this.shouldRenderTime,
-    this.userAvatar,
-    this.userName,
+    required this.previousMessageDifferentAuthor,
+    this.avatarData,
   }) : super(key: key);
 
   /// Locale will be passed to the `Intl` package. Make sure you initialized
@@ -52,18 +53,22 @@ class Message extends StatelessWidget {
   /// different spacing for sent and received messages.
   final bool previousMessageSameAuthor;
 
+  /// Whether previous message was sent by a different person. Used to
+  /// show the user icon and name in that case.
+  final bool previousMessageDifferentAuthor;
+
   /// Whether delivery time should be rendered. It is not rendered for
   /// received messages and when sent messages have small difference in
   /// delivery time.
   final bool shouldRenderTime;
 
-  /// An optional avatar that will only be shown if this is a message the
+  /// An optional user icon and name that will only be shown if this is a message the
   /// current user received, not sent.
-  final Widget? userAvatar;
+  final AvatarData? avatarData;
 
-  /// An optional name that will only be shown if this is a message the
-  /// current user received, not sent.
-  final Widget? userName;
+  Widget? get userName => avatarData?.userName;
+
+  Widget? get userAvatar => avatarData?.userAvatar;
 
   Widget _buildMessage() {
     switch (message.type) {
@@ -183,7 +188,7 @@ class Message extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          if (_user.id != message.authorId && userAvatar != null) userAvatar!,
+          if (_user.id != message.authorId && userAvatar != null && previousMessageDifferentAuthor) userAvatar!,
           ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: messageWidth.toDouble(),
@@ -206,7 +211,8 @@ class Message extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (_user.id != message.authorId && userName != null) userName!,
+                          if (_user.id != message.authorId && userName != null && previousMessageDifferentAuthor)
+                            userName!,
                           _buildMessage(),
                         ],
                       ),

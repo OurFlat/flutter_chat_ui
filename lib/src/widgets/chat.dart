@@ -1,10 +1,12 @@
 import 'dart:math';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/src/widgets/inherited_l10n.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+
 import '../chat_l10n.dart';
 import '../chat_theme.dart';
 import '../conditional/conditional.dart';
@@ -32,6 +34,7 @@ class Chat extends StatefulWidget {
     this.theme = const DefaultChatTheme(),
     required this.user,
     this.onAudioRecorded,
+    this.avatarData,
   }) : super(key: key);
 
   /// See [Message.dateLocale]
@@ -69,8 +72,7 @@ class Chat extends StatefulWidget {
   final void Function(types.Message)? onMessageTap;
 
   /// See [Message.onPreviewDataFetched]
-  final void Function(types.TextMessage, types.PreviewData)?
-      onPreviewDataFetched;
+  final void Function(types.TextMessage, types.PreviewData)? onPreviewDataFetched;
 
   /// See [Input.onSendPressed]
   final void Function(types.PartialText) onSendPressed;
@@ -82,6 +84,8 @@ class Chat extends StatefulWidget {
 
   /// See [InheritedUser.user]
   final types.User user;
+
+  final Map<String, AvatarData>? avatarData;
 
   @override
   _ChatState createState() => _ChatState();
@@ -148,13 +152,11 @@ class _ChatState extends State<Chat> {
       child: Stack(
         children: [
           PhotoViewGallery.builder(
-            builder: (BuildContext context, int index) =>
-                PhotoViewGalleryPageOptions(
+            builder: (BuildContext context, int index) => PhotoViewGalleryPageOptions(
               imageProvider: Conditional().getProvider(galleryItems[index]),
             ),
             itemCount: galleryItems.length,
-            loadingBuilder: (context, event) =>
-                _imageGalleryLoadingBuilder(context, event),
+            loadingBuilder: (context, event) => _imageGalleryLoadingBuilder(context, event),
             onPageChanged: _onPageChanged,
             pageController: PageController(initialPage: _imageViewIndex),
             scrollPhysics: const ClampingScrollPhysics(),
@@ -174,11 +176,9 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    final _messageWidth =
-        min(MediaQuery.of(context).size.width * 0.7, 400).floor();
+    final _messageWidth = min(MediaQuery.of(context).size.width * 0.7, 400).floor();
 
-    final galleryItems =
-        widget.messages.fold<List<String>>([], (previousValue, element) {
+    final galleryItems = widget.messages.fold<List<String>>([], (previousValue, element) {
       // Check if element is image message
       if (element is types.ImageMessage) {
         // For web add only remote uri, local files are not yet supported
@@ -229,8 +229,7 @@ class _ChatState extends State<Chat> {
                                 ),
                               )
                             : GestureDetector(
-                                onTap: () => FocusManager.instance.primaryFocus
-                                    ?.unfocus(),
+                                onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
                                 child: ListView.builder(
                                   itemCount: widget.messages.length + 1,
                                   padding: EdgeInsets.zero,
@@ -242,77 +241,55 @@ class _ChatState extends State<Chat> {
 
                                     final message = widget.messages[index];
                                     final isFirst = index == 0;
-                                    final isLast =
-                                        index == widget.messages.length - 1;
-                                    final nextMessage = isLast
-                                        ? null
-                                        : widget.messages[index + 1];
-                                    final previousMessage = isFirst
-                                        ? null
-                                        : widget.messages[index - 1];
+                                    final isLast = index == widget.messages.length - 1;
+                                    final nextMessage = isLast ? null : widget.messages[index + 1];
+                                    final previousMessage = isFirst ? null : widget.messages[index - 1];
+                                    final previousMessageDifferentAuthor =
+                                        previousMessage?.authorId != message.authorId;
 
                                     var nextMessageDifferentDay = false;
                                     var nextMessageSameAuthor = false;
                                     var previousMessageSameAuthor = false;
-                                    var shouldRenderTime =
-                                        message.timestamp != null;
+                                    var shouldRenderTime = message.timestamp != null;
 
-                                    if (nextMessage != null &&
-                                        nextMessage.timestamp != null) {
-                                      nextMessageDifferentDay = message
-                                                  .timestamp !=
-                                              null &&
+                                    if (nextMessage != null && nextMessage.timestamp != null) {
+                                      nextMessageDifferentDay = message.timestamp != null &&
                                           DateTime.fromMillisecondsSinceEpoch(
                                                 message.timestamp! * 1000,
                                               ).day !=
-                                              DateTime
-                                                  .fromMillisecondsSinceEpoch(
+                                              DateTime.fromMillisecondsSinceEpoch(
                                                 nextMessage.timestamp! * 1000,
                                               ).day;
-                                      nextMessageSameAuthor =
-                                          nextMessage.authorId ==
-                                              message.authorId;
+                                      nextMessageSameAuthor = nextMessage.authorId == message.authorId;
                                     }
 
                                     if (previousMessage != null) {
-                                      previousMessageSameAuthor =
-                                          previousMessage.authorId ==
-                                              message.authorId;
-                                      shouldRenderTime = message.timestamp !=
-                                              null &&
+                                      previousMessageSameAuthor = previousMessage.authorId == message.authorId;
+                                      shouldRenderTime = message.timestamp != null &&
                                           previousMessage.timestamp != null &&
                                           (!previousMessageSameAuthor ||
-                                              previousMessage.timestamp! -
-                                                      message.timestamp! >=
-                                                  60);
+                                              previousMessage.timestamp! - message.timestamp! >= 60);
                                     }
 
                                     return Column(
                                       children: [
-                                        if (nextMessageDifferentDay ||
-                                            (isLast &&
-                                                message.timestamp != null))
+                                        if (nextMessageDifferentDay || (isLast && message.timestamp != null))
                                           Container(
                                             margin: EdgeInsets.only(
                                               bottom: 32,
-                                              top: nextMessageSameAuthor
-                                                  ? 24
-                                                  : 16,
+                                              top: nextMessageSameAuthor ? 24 : 16,
                                             ),
                                             child: Text(
                                               getVerboseDateTimeRepresentation(
-                                                DateTime
-                                                    .fromMillisecondsSinceEpoch(
+                                                DateTime.fromMillisecondsSinceEpoch(
                                                   message.timestamp! * 1000,
                                                 ),
                                                 widget.dateLocale,
                                                 widget.l10n.today,
                                                 widget.l10n.yesterday,
                                               ),
-                                              style: widget.theme.subtitle2
-                                                  .copyWith(
-                                                color:
-                                                    widget.theme.subtitle2Color,
+                                              style: widget.theme.subtitle2.copyWith(
+                                                color: widget.theme.subtitle2Color,
                                               ),
                                             ),
                                           ),
@@ -321,27 +298,26 @@ class _ChatState extends State<Chat> {
                                           dateLocale: widget.dateLocale,
                                           message: message,
                                           messageWidth: _messageWidth,
-                                          onMessageLongPress:
-                                              widget.onMessageLongPress,
+                                          onMessageLongPress: widget.onMessageLongPress,
                                           onMessageTap: (tappedMessage) {
-                                            if (tappedMessage
-                                                    is types.ImageMessage &&
-                                                widget.disableImageGallery !=
-                                                    true) {
+                                            if (tappedMessage is types.ImageMessage &&
+                                                widget.disableImageGallery != true) {
                                               _onImagePressed(
                                                 tappedMessage.uri,
                                                 galleryItems,
                                               );
                                             }
 
-                                            widget.onMessageTap
-                                                ?.call(tappedMessage);
+                                            widget.onMessageTap?.call(tappedMessage);
                                           },
-                                          onPreviewDataFetched:
-                                              _onPreviewDataFetched,
-                                          previousMessageSameAuthor:
-                                              previousMessageSameAuthor,
+                                          onPreviewDataFetched: _onPreviewDataFetched,
+                                          previousMessageSameAuthor: previousMessageSameAuthor,
+                                          previousMessageDifferentAuthor: previousMessageDifferentAuthor,
                                           shouldRenderTime: shouldRenderTime,
+                                          avatarData: widget.avatarData != null &&
+                                                  widget.avatarData!.containsValue(message.authorId)
+                                              ? widget.avatarData![message.authorId]
+                                              : null,
                                         ),
                                       ],
                                     );
@@ -366,4 +342,11 @@ class _ChatState extends State<Chat> {
       ),
     );
   }
+}
+
+class AvatarData {
+  const AvatarData(this.userAvatar, this.userName);
+
+  final Widget userAvatar;
+  final Widget userName;
 }
