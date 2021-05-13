@@ -244,8 +244,8 @@ class _ChatState extends State<Chat> {
                                     final isLast = index == widget.messages.length - 1;
                                     final nextMessage = isLast ? null : widget.messages[index + 1];
                                     final previousMessage = isFirst ? null : widget.messages[index - 1];
-                                    final previousMessageDifferentAuthor =
-                                        previousMessage?.authorId != message.authorId;
+                                    final nextMessageDifferentAuthor =
+                                        nextMessage?.authorId != message.authorId;
 
                                     var nextMessageDifferentDay = false;
                                     var nextMessageSameAuthor = false;
@@ -312,10 +312,10 @@ class _ChatState extends State<Chat> {
                                           },
                                           onPreviewDataFetched: _onPreviewDataFetched,
                                           previousMessageSameAuthor: previousMessageSameAuthor,
-                                          previousMessageDifferentAuthor: previousMessageDifferentAuthor,
+                                          nextMessageDifferentAuthor: nextMessageDifferentAuthor,
                                           shouldRenderTime: shouldRenderTime,
                                           avatarData: widget.avatarData != null &&
-                                                  widget.avatarData!.containsValue(message.authorId)
+                                                  widget.avatarData!.containsKey(message.authorId)
                                               ? widget.avatarData![message.authorId]
                                               : null,
                                         ),

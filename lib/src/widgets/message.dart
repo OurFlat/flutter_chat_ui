@@ -25,7 +25,7 @@ class Message extends StatelessWidget {
     this.onPreviewDataFetched,
     required this.previousMessageSameAuthor,
     required this.shouldRenderTime,
-    required this.previousMessageDifferentAuthor,
+    required this.nextMessageDifferentAuthor,
     this.avatarData,
   }) : super(key: key);
 
@@ -53,9 +53,9 @@ class Message extends StatelessWidget {
   /// different spacing for sent and received messages.
   final bool previousMessageSameAuthor;
 
-  /// Whether previous message was sent by a different person. Used to
+  /// Whether next message was sent by a different person. Used to
   /// show the user icon and name in that case.
-  final bool previousMessageDifferentAuthor;
+  final bool nextMessageDifferentAuthor;
 
   /// Whether delivery time should be rendered. It is not rendered for
   /// received messages and when sent messages have small difference in
@@ -188,7 +188,7 @@ class Message extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          if (_user.id != message.authorId && userAvatar != null && previousMessageDifferentAuthor) userAvatar!,
+          if (_user.id != message.authorId && userAvatar != null && nextMessageDifferentAuthor) userAvatar!,
           ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: messageWidth.toDouble(),
@@ -211,7 +211,7 @@ class Message extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (_user.id != message.authorId && userName != null && previousMessageDifferentAuthor)
+                          if (_user.id != message.authorId && userName != null && nextMessageDifferentAuthor)
                             userName!,
                           _buildMessage(),
                         ],
