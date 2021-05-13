@@ -70,6 +70,8 @@ class Message extends StatelessWidget {
 
   Widget? get userAvatar => avatarData?.userAvatar;
 
+  Widget? get avatarPlaceHolder => avatarData?.avatarPlaceHolder;
+
   Widget _buildMessage() {
     switch (message.type) {
       case types.MessageType.file:
@@ -188,7 +190,7 @@ class Message extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          if (_user.id != message.authorId && userAvatar != null && nextMessageDifferentAuthor) userAvatar!,
+          _showAvatarOrPlaceholder(_user),
           ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: messageWidth.toDouble(),
@@ -211,8 +213,7 @@ class Message extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (_user.id != message.authorId && userName != null && nextMessageDifferentAuthor)
-                            userName!,
+                          if (_user.id != message.authorId && userName != null && nextMessageDifferentAuthor) userName!,
                           _buildMessage(),
                         ],
                       ),
@@ -232,5 +233,16 @@ class Message extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _showAvatarOrPlaceholder(types.User user) {
+    if (user.id != message.authorId) {
+      if (nextMessageDifferentAuthor && userAvatar != null) {
+        return userAvatar!;
+      } else if (avatarPlaceHolder != null) {
+        return avatarPlaceHolder!;
+      }
+    }
+    return Container();
   }
 }

@@ -345,8 +345,9 @@ class _ChatState extends State<Chat> {
 }
 
 class AvatarData {
-  const AvatarData(this.userAvatar, this.userName);
+  const AvatarData(this.userAvatar, this.userName, this.avatarPlaceHolder);
 
   final Widget userAvatar;
   final Widget userName;
+  final Widget avatarPlaceHolder;
 }
