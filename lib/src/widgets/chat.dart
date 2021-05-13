@@ -175,7 +175,7 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     final _messageWidth =
-        min(MediaQuery.of(context).size.width * 0.77, 440).floor();
+        min(MediaQuery.of(context).size.width * 0.7, 400).floor();
 
     final galleryItems =
         widget.messages.fold<List<String>>([], (previousValue, element) {

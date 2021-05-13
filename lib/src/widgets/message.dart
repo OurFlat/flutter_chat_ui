@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/src/widgets/audio_message.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+
 import 'file_message.dart';
 import 'image_message.dart';
 import 'inherited_chat_theme.dart';
@@ -23,6 +24,8 @@ class Message extends StatelessWidget {
     this.onPreviewDataFetched,
     required this.previousMessageSameAuthor,
     required this.shouldRenderTime,
+    this.userAvatar,
+    this.userName,
   }) : super(key: key);
 
   /// Locale will be passed to the `Intl` package. Make sure you initialized
@@ -43,8 +46,7 @@ class Message extends StatelessWidget {
   final void Function(types.Message)? onMessageTap;
 
   /// See [TextMessage.onPreviewDataFetched]
-  final void Function(types.TextMessage, types.PreviewData)?
-      onPreviewDataFetched;
+  final void Function(types.TextMessage, types.PreviewData)? onPreviewDataFetched;
 
   /// Whether previous message was sent by the same person. Used for
   /// different spacing for sent and received messages.
@@ -54,6 +56,14 @@ class Message extends StatelessWidget {
   /// received messages and when sent messages have small difference in
   /// delivery time.
   final bool shouldRenderTime;
+
+  /// An optional avatar that will only be shown if this is a message the
+  /// current user received, not sent.
+  final Widget? userAvatar;
+
+  /// An optional name that will only be shown if this is a message the
+  /// current user received, not sent.
+  final Widget? userName;
 
   Widget _buildMessage() {
     switch (message.type) {
@@ -153,60 +163,67 @@ class Message extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _user = InheritedUser.of(context).user;
-    final _messageBorderRadius =
-        InheritedChatTheme.of(context).theme.messageBorderRadius;
+    final _messageBorderRadius = InheritedChatTheme.of(context).theme.messageBorderRadius;
     final _borderRadius = BorderRadius.only(
-      bottomLeft: Radius.circular(
-          _user.id == message.authorId ? _messageBorderRadius : 0),
-      bottomRight: Radius.circular(
-          _user.id == message.authorId ? 0 : _messageBorderRadius),
+      bottomLeft: Radius.circular(_user.id == message.authorId ? _messageBorderRadius : 0),
+      bottomRight: Radius.circular(_user.id == message.authorId ? 0 : _messageBorderRadius),
       topLeft: Radius.circular(_messageBorderRadius),
       topRight: Radius.circular(_messageBorderRadius),
     );
     final _currentUserIsAuthor = _user.id == message.authorId;
 
     return Container(
-      alignment: _user.id == message.authorId
-          ? Alignment.centerRight
-          : Alignment.centerLeft,
+      alignment: _user.id == message.authorId ? Alignment.centerRight : Alignment.centerLeft,
       margin: EdgeInsets.only(
         bottom: previousMessageSameAuthor ? 8 : 16,
-        left: 24,
-        right: 24,
+        left: 12,
+        right: 12,
       ),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: messageWidth.toDouble(),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onLongPress: () => onMessageLongPress?.call(message),
-              onTap: () => onMessageTap?.call(message),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: _borderRadius,
-                  color: !_currentUserIsAuthor ||
-                          message.type == types.MessageType.image
-                      ? InheritedChatTheme.of(context).theme.secondaryColor
-                      : InheritedChatTheme.of(context).theme.primaryColor,
-                ),
-                child: ClipRRect(
-                  borderRadius: _borderRadius,
-                  child: _buildMessage(),
-                ),
-              ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (_user.id != message.authorId && userAvatar != null) userAvatar!,
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: messageWidth.toDouble(),
             ),
-            if (shouldRenderTime)
-              Container(
-                margin: const EdgeInsets.only(
-                  top: 8,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onLongPress: () => onMessageLongPress?.call(message),
+                  onTap: () => onMessageTap?.call(message),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: _borderRadius,
+                      color: !_currentUserIsAuthor || message.type == types.MessageType.image
+                          ? InheritedChatTheme.of(context).theme.secondaryColor
+                          : InheritedChatTheme.of(context).theme.primaryColor,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: _borderRadius,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (_user.id != message.authorId && userName != null) userName!,
+                          _buildMessage(),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                child: _buildTime(_currentUserIsAuthor, context),
-              )
-          ],
-        ),
+                if (shouldRenderTime)
+                  Container(
+                    margin: const EdgeInsets.only(
+                      top: 8,
+                    ),
+                    child: _buildTime(_currentUserIsAuthor, context),
+                  )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
