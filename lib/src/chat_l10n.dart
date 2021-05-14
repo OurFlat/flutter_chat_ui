@@ -72,8 +72,40 @@ class ChatL10nEn extends ChatL10n {
     String pauseButtonAccessibilityLabel = 'Pause',
     String audioTrackAccessibilityLabel = 'Tap to play/pause, slide to seek',
   }) : super(
-          attachmentButtonAccessibilityLabel:
-              attachmentButtonAccessibilityLabel,
+          attachmentButtonAccessibilityLabel: attachmentButtonAccessibilityLabel,
+          emptyChatPlaceholder: emptyChatPlaceholder,
+          fileButtonAccessibilityLabel: fileButtonAccessibilityLabel,
+          inputPlaceholder: inputPlaceholder,
+          sendButtonAccessibilityLabel: sendButtonAccessibilityLabel,
+          today: today,
+          yesterday: yesterday,
+          audioButtonAccessibilityLabel: audioButtonAccessibilityLabel,
+          playButtonAccessibilityLabel: playButtonAccessibilityLabel,
+          pauseButtonAccessibilityLabel: pauseButtonAccessibilityLabel,
+          audioTrackAccessibilityLabel: audioTrackAccessibilityLabel,
+        );
+}
+
+/// German l10n which extends [ChatL10n]
+@immutable
+class ChatL10nDe extends ChatL10n {
+  /// Creates German l10n. Use this constructor if you want to
+  /// override only a couple of variables, otherwise create a new class
+  /// which extends [ChatL10n]
+  const ChatL10nDe({
+    String attachmentButtonAccessibilityLabel = 'Medien versenden',
+    String emptyChatPlaceholder = 'Noch keine Nachrichten vorhanden.',
+    String fileButtonAccessibilityLabel = 'Datei',
+    String inputPlaceholder = 'Nachricht',
+    String sendButtonAccessibilityLabel = 'Senden',
+    String today = 'Heute',
+    String yesterday = 'Gestern',
+    String audioButtonAccessibilityLabel = 'Sprachnachricht aufnehmen',
+    String playButtonAccessibilityLabel = 'Wiedergabe',
+    String pauseButtonAccessibilityLabel = 'Pause',
+    String audioTrackAccessibilityLabel = 'Tippen für Wiedergabe/Pause, Wischen zum vorspulen',
+  }) : super(
+          attachmentButtonAccessibilityLabel: attachmentButtonAccessibilityLabel,
           emptyChatPlaceholder: emptyChatPlaceholder,
           fileButtonAccessibilityLabel: fileButtonAccessibilityLabel,
           inputPlaceholder: inputPlaceholder,
@@ -104,11 +136,9 @@ class ChatL10nEs extends ChatL10n {
     String audioButtonAccessibilityLabel = 'Grabar mensaje de audio',
     String playButtonAccessibilityLabel = 'Reproducir',
     String pauseButtonAccessibilityLabel = 'Pausar',
-    String audioTrackAccessibilityLabel =
-        'Toca para reproducir/pausar, desliza para buscar',
+    String audioTrackAccessibilityLabel = 'Toca para reproducir/pausar, desliza para buscar',
   }) : super(
-          attachmentButtonAccessibilityLabel:
-              attachmentButtonAccessibilityLabel,
+          attachmentButtonAccessibilityLabel: attachmentButtonAccessibilityLabel,
           emptyChatPlaceholder: emptyChatPlaceholder,
           fileButtonAccessibilityLabel: fileButtonAccessibilityLabel,
           inputPlaceholder: inputPlaceholder,
@@ -139,11 +169,9 @@ class ChatL10nPl extends ChatL10n {
     String audioButtonAccessibilityLabel = 'Nagraj wiadomość dźwiękową',
     String playButtonAccessibilityLabel = 'Odtwórz',
     String pauseButtonAccessibilityLabel = 'Wstrzymać',
-    String audioTrackAccessibilityLabel =
-        'Dotknij, aby odtworzyć/wstrzymać, przesuń, aby wyszukać',
+    String audioTrackAccessibilityLabel = 'Dotknij, aby odtworzyć/wstrzymać, przesuń, aby wyszukać',
   }) : super(
-          attachmentButtonAccessibilityLabel:
-              attachmentButtonAccessibilityLabel,
+          attachmentButtonAccessibilityLabel: attachmentButtonAccessibilityLabel,
           emptyChatPlaceholder: emptyChatPlaceholder,
           fileButtonAccessibilityLabel: fileButtonAccessibilityLabel,
           inputPlaceholder: inputPlaceholder,
@@ -174,11 +202,9 @@ class ChatL10nRu extends ChatL10n {
     String audioButtonAccessibilityLabel = 'Записать звуковое сообщение',
     String playButtonAccessibilityLabel = 'Воспроизвести',
     String pauseButtonAccessibilityLabel = 'Приостановить',
-    String audioTrackAccessibilityLabel =
-        'Нажмите для воспроизведения / паузы, проведите пальцем для поиска',
+    String audioTrackAccessibilityLabel = 'Нажмите для воспроизведения / паузы, проведите пальцем для поиска',
   }) : super(
-          attachmentButtonAccessibilityLabel:
-              attachmentButtonAccessibilityLabel,
+          attachmentButtonAccessibilityLabel: attachmentButtonAccessibilityLabel,
           emptyChatPlaceholder: emptyChatPlaceholder,
           fileButtonAccessibilityLabel: fileButtonAccessibilityLabel,
           inputPlaceholder: inputPlaceholder,
@@ -209,11 +235,9 @@ class ChatL10nUk extends ChatL10n {
     String audioButtonAccessibilityLabel = 'Записати звукове повідомлення',
     String playButtonAccessibilityLabel = 'Відтворіть',
     String pauseButtonAccessibilityLabel = 'Призупиніть',
-    String audioTrackAccessibilityLabel =
-        'Натисніть, щоб відтворити / призупинити, проведіть пальцем, щоб шукати',
+    String audioTrackAccessibilityLabel = 'Натисніть, щоб відтворити / призупинити, проведіть пальцем, щоб шукати',
   }) : super(
-          attachmentButtonAccessibilityLabel:
-              attachmentButtonAccessibilityLabel,
+          attachmentButtonAccessibilityLabel: attachmentButtonAccessibilityLabel,
           emptyChatPlaceholder: emptyChatPlaceholder,
           fileButtonAccessibilityLabel: fileButtonAccessibilityLabel,
           inputPlaceholder: inputPlaceholder,
