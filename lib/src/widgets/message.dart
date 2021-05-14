@@ -27,6 +27,7 @@ class Message extends StatelessWidget {
     required this.shouldRenderTime,
     required this.nextMessageDifferentAuthor,
     this.avatarData,
+    required this.previousMessageDifferentAuthor,
   }) : super(key: key);
 
   /// Locale will be passed to the `Intl` package. Make sure you initialized
@@ -54,8 +55,12 @@ class Message extends StatelessWidget {
   final bool previousMessageSameAuthor;
 
   /// Whether next message was sent by a different person. Used to
-  /// show the user icon and name in that case.
+  /// show the name in that case.
   final bool nextMessageDifferentAuthor;
+
+  /// Whether previous message was sent by a different person. Used to
+  /// show the user icon in that case.
+  final bool previousMessageDifferentAuthor;
 
   /// Whether delivery time should be rendered. It is not rendered for
   /// received messages and when sent messages have small difference in
@@ -127,15 +132,12 @@ class Message extends StatelessWidget {
                 package: 'flutter_chat_ui',
               );
       case types.Status.sending:
-        return SizedBox(
-          height: 12,
-          width: 12,
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.transparent,
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation<Color>(
-              InheritedChatTheme.of(context).theme.primaryColor,
-            ),
+        return Padding(
+          padding: const EdgeInsets.only(left: 2, top: 3),
+          child: Icon(
+            Icons.watch_later_outlined,
+            color: InheritedChatTheme.of(context).theme.primaryColor,
+            size: 12,
           ),
         );
       default:
@@ -147,20 +149,15 @@ class Message extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          margin: EdgeInsets.only(
-            right: currentUserIsAuthor ? 8 : 16,
-          ),
-          child: Text(
-            DateFormat.jm(dateLocale).format(
-              DateTime.fromMillisecondsSinceEpoch(
-                message.timestamp! * 1000,
-              ),
+        Text(
+          DateFormat.jm(dateLocale).format(
+            DateTime.fromMillisecondsSinceEpoch(
+              message.timestamp! * 1000,
             ),
-            style: InheritedChatTheme.of(context).theme.caption.copyWith(
-                  color: InheritedChatTheme.of(context).theme.captionColor,
-                ),
           ),
+          style: InheritedChatTheme.of(context).theme.caption.copyWith(
+                color: InheritedChatTheme.of(context).theme.captionColor,
+              ),
         ),
         if (currentUserIsAuthor) _buildStatus(context)
       ],
@@ -240,7 +237,7 @@ class Message extends StatelessWidget {
 
   Widget _showAvatarOrPlaceholder(types.User user) {
     if (user.id != message.authorId) {
-      if (nextMessageDifferentAuthor && userAvatar != null) {
+      if (previousMessageDifferentAuthor && userAvatar != null) {
         return userAvatar!;
       } else if (avatarPlaceHolder != null) {
         return avatarPlaceHolder!;

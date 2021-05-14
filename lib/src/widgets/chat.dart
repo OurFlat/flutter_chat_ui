@@ -30,11 +30,13 @@ class Chat extends StatefulWidget {
     this.onMessageLongPress,
     this.onMessageTap,
     this.onPreviewDataFetched,
-    required this.onSendPressed,
+    this.onSendPressed,
     this.theme = const DefaultChatTheme(),
     required this.user,
     this.onAudioRecorded,
     this.avatarData,
+    this.inputBuilder,
+    this.noMessagesBuilder,
   }) : super(key: key);
 
   /// See [Message.dateLocale]
@@ -75,7 +77,7 @@ class Chat extends StatefulWidget {
   final void Function(types.TextMessage, types.PreviewData)? onPreviewDataFetched;
 
   /// See [Input.onSendPressed]
-  final void Function(types.PartialText) onSendPressed;
+  final void Function(types.PartialText)? onSendPressed;
 
   /// Chat theme. Extend [ChatTheme] class to create your own theme or use
   /// existing one, like the [DefaultChatTheme]. You can customize only certain
@@ -85,7 +87,14 @@ class Chat extends StatefulWidget {
   /// See [InheritedUser.user]
   final types.User user;
 
+  /// Widgets used to show user avatars for each authorId (the map key)
   final Map<String, AvatarData>? avatarData;
+
+  /// Build a custom input if provided
+  final WidgetBuilder? inputBuilder;
+
+  /// Build a custom no message widget
+  final WidgetBuilder? noMessagesBuilder;
 
   @override
   _ChatState createState() => _ChatState();
@@ -213,21 +222,22 @@ class _ChatState extends State<Chat> {
                     children: [
                       Flexible(
                         child: widget.messages.isEmpty
-                            ? SizedBox.expand(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                  ),
-                                  child: Text(
-                                    widget.l10n.emptyChatPlaceholder,
-                                    style: widget.theme.body1.copyWith(
-                                      color: widget.theme.captionColor,
+                            ? widget.noMessagesBuilder?.call(context) ??
+                                SizedBox.expand(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 24,
                                     ),
-                                    textAlign: TextAlign.center,
+                                    child: Text(
+                                      widget.l10n.emptyChatPlaceholder,
+                                      style: widget.theme.body1.copyWith(
+                                        color: widget.theme.captionColor,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
-                                ),
-                              )
+                                )
                             : GestureDetector(
                                 onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
                                 child: ListView.builder(
@@ -244,8 +254,6 @@ class _ChatState extends State<Chat> {
                                     final isLast = index == widget.messages.length - 1;
                                     final nextMessage = isLast ? null : widget.messages[index + 1];
                                     final previousMessage = isFirst ? null : widget.messages[index - 1];
-                                    final nextMessageDifferentAuthor =
-                                        nextMessage?.authorId != message.authorId;
 
                                     var nextMessageDifferentDay = false;
                                     var nextMessageSameAuthor = false;
@@ -312,7 +320,8 @@ class _ChatState extends State<Chat> {
                                           },
                                           onPreviewDataFetched: _onPreviewDataFetched,
                                           previousMessageSameAuthor: previousMessageSameAuthor,
-                                          nextMessageDifferentAuthor: nextMessageDifferentAuthor,
+                                          nextMessageDifferentAuthor: nextMessage?.authorId != message.authorId,
+                                          previousMessageDifferentAuthor: previousMessage?.authorId != message.authorId,
                                           shouldRenderTime: shouldRenderTime,
                                           avatarData: widget.avatarData != null &&
                                                   widget.avatarData!.containsKey(message.authorId)
@@ -325,12 +334,13 @@ class _ChatState extends State<Chat> {
                                 ),
                               ),
                       ),
-                      Input(
-                        isAttachmentUploading: widget.isAttachmentUploading,
-                        onAttachmentPressed: widget.onAttachmentPressed,
-                        onAudioRecorded: widget.onAudioRecorded,
-                        onSendPressed: widget.onSendPressed,
-                      ),
+                      widget.inputBuilder?.call(context) ??
+                          Input(
+                            isAttachmentUploading: widget.isAttachmentUploading,
+                            onAttachmentPressed: widget.onAttachmentPressed,
+                            onAudioRecorded: widget.onAudioRecorded,
+                            onSendPressed: widget.onSendPressed ?? (text) {},
+                          ),
                     ],
                   ),
                 ),
