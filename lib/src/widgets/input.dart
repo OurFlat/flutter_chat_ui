@@ -31,9 +31,9 @@ class Input extends StatefulWidget {
   /// something is uploading so you need to set this manually.
   final bool? isAttachmentUploading;
 
-  /// Will be called on [SendButton] tap. Has [types.PartialText] which can
+  /// Will be called on [SendButton] tap. Has [types.TextMessage] which can
   /// be transformed to [types.TextMessage] and added to the messages list.
-  final void Function(types.PartialText) onSendPressed;
+  final void Function(types.TextMessage) onSendPressed;
 
   /// See [AudioButton.onPressed]
   final Future<bool> Function({
@@ -68,9 +68,7 @@ class _InputState extends State<Input> {
   }
 
   void _handleSendPressed() {
-    final _partialText = types.PartialText(text: _textController.text.trim());
-    widget.onSendPressed(_partialText);
-    _textController.clear();
+    // TODO if used again
   }
 
   void _handleTextControllerChange() {

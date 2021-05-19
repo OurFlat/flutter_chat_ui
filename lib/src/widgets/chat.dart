@@ -77,7 +77,7 @@ class Chat extends StatefulWidget {
   final void Function(types.TextMessage, types.PreviewData)? onPreviewDataFetched;
 
   /// See [Input.onSendPressed]
-  final void Function(types.PartialText)? onSendPressed;
+  final void Function(types.TextMessage)? onSendPressed;
 
   /// Chat theme. Extend [ChatTheme] class to create your own theme or use
   /// existing one, like the [DefaultChatTheme]. You can customize only certain
