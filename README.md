@@ -65,3 +65,4 @@ Flyer Chat has adopted the [Contributor Covenant](https://www.contributor-covena
 ## License
 
 Licensed under the [Apache License, Version 2.0](LICENSE)
+
