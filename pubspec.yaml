@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
   flutter_chat_types:
     git:
-      url: https://github.com/sarbogast/flutter_chat_types
+      url: https://github.com/OurFlat/flutter_chat_types
       ref: feature/audio_message_types
   flutter_link_previewer:
     git:
