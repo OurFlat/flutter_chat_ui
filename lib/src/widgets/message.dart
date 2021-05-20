@@ -20,14 +20,13 @@ class Message extends StatelessWidget {
     this.dateLocale,
     required this.message,
     required this.messageWidth,
-    this.onMessageLongPress,
-    this.onMessageTap,
     this.onPreviewDataFetched,
     required this.previousMessageSameAuthor,
     required this.shouldRenderTime,
     required this.nextMessageDifferentAuthor,
     this.avatarData,
     required this.previousMessageDifferentAuthor,
+    this.messageContainerWrapperBuilder,
   }) : super(key: key);
 
   /// Locale will be passed to the `Intl` package. Make sure you initialized
@@ -40,12 +39,6 @@ class Message extends StatelessWidget {
 
   /// Maximum message width
   final int messageWidth;
-
-  /// Called when user makes a long press on any message
-  final void Function(types.Message)? onMessageLongPress;
-
-  /// Called when user taps on any message
-  final void Function(types.Message)? onMessageTap;
 
   /// See [TextMessage.onPreviewDataFetched]
   final void Function(types.TextMessage, types.PreviewData)? onPreviewDataFetched;
@@ -70,6 +63,9 @@ class Message extends StatelessWidget {
   /// An optional user icon and name that will only be shown if this is a message the
   /// current user received, not sent.
   final AvatarData? avatarData;
+
+  /// If provided, allows you to wrap message widget with any other widget
+  final Widget Function(types.Message, Widget)? messageContainerWrapperBuilder;
 
   Widget? get userName => avatarData?.userName;
 
@@ -198,28 +194,11 @@ class Message extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                GestureDetector(
-                  onLongPress: () => onMessageLongPress?.call(message),
-                  onTap: () => onMessageTap?.call(message),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: _borderRadius,
-                      color: !_currentUserIsAuthor || message.type == types.MessageType.image
-                          ? InheritedChatTheme.of(context).theme.secondaryColor
-                          : InheritedChatTheme.of(context).theme.primaryColor,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: _borderRadius,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (_user.id != message.authorId && userName != null && nextMessageDifferentAuthor) userName!,
-                          _buildMessage(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                if (messageContainerWrapperBuilder != null)
+                  messageContainerWrapperBuilder!(
+                      message, _buildMessageBubble(_borderRadius, _currentUserIsAuthor, context, _user))
+                else
+                  _buildMessageBubble(_borderRadius, _currentUserIsAuthor, context, _user),
                 if (shouldRenderTime)
                   Container(
                     margin: const EdgeInsets.only(
@@ -231,6 +210,28 @@ class Message extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Container _buildMessageBubble(
+      BorderRadius _borderRadius, bool _currentUserIsAuthor, BuildContext context, types.User _user) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: _borderRadius,
+        color: !_currentUserIsAuthor || message.type == types.MessageType.image
+            ? InheritedChatTheme.of(context).theme.secondaryColor
+            : InheritedChatTheme.of(context).theme.primaryColor,
+      ),
+      child: ClipRRect(
+        borderRadius: _borderRadius,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (_user.id != message.authorId && userName != null && nextMessageDifferentAuthor) userName!,
+            _buildMessage(),
+          ],
+        ),
       ),
     );
   }

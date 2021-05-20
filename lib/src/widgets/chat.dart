@@ -27,8 +27,7 @@ class Chat extends StatefulWidget {
     this.l10n = const ChatL10nEn(),
     required this.messages,
     this.onAttachmentPressed,
-    this.onMessageLongPress,
-    this.onMessageTap,
+    this.messageContainerWrapperBuilder,
     this.onPreviewDataFetched,
     this.onSendPressed,
     this.theme = const DefaultChatTheme(),
@@ -67,11 +66,8 @@ class Chat extends StatefulWidget {
   /// See [Input.onAttachmentPressed]
   final void Function()? onAttachmentPressed;
 
-  /// See [Message.onMessageLongPress]
-  final void Function(types.Message)? onMessageLongPress;
-
-  /// See [Message.onMessageTap]
-  final void Function(types.Message)? onMessageTap;
+  /// See [Message.messageContainerWrapperBuilder]
+  final Widget Function(types.Message, Widget)? messageContainerWrapperBuilder;
 
   /// See [Message.onPreviewDataFetched]
   final void Function(types.TextMessage, types.PreviewData)? onPreviewDataFetched;
@@ -306,18 +302,6 @@ class _ChatState extends State<Chat> {
                                           dateLocale: widget.dateLocale,
                                           message: message,
                                           messageWidth: _messageWidth,
-                                          onMessageLongPress: widget.onMessageLongPress,
-                                          onMessageTap: (tappedMessage) {
-                                            if (tappedMessage is types.ImageMessage &&
-                                                widget.disableImageGallery != true) {
-                                              _onImagePressed(
-                                                tappedMessage.uri,
-                                                galleryItems,
-                                              );
-                                            }
-
-                                            widget.onMessageTap?.call(tappedMessage);
-                                          },
                                           onPreviewDataFetched: _onPreviewDataFetched,
                                           previousMessageSameAuthor: previousMessageSameAuthor,
                                           nextMessageDifferentAuthor: nextMessage?.authorId != message.authorId,
@@ -327,6 +311,7 @@ class _ChatState extends State<Chat> {
                                                   widget.avatarData!.containsKey(message.authorId)
                                               ? widget.avatarData![message.authorId]
                                               : null,
+                                          messageContainerWrapperBuilder: widget.messageContainerWrapperBuilder,
                                         ),
                                       ],
                                     );
