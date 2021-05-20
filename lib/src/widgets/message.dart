@@ -142,13 +142,22 @@ class Message extends StatelessWidget {
   }
 
   Widget _buildTime(bool currentUserIsAuthor, BuildContext context) {
+    final edited = message is types.TextMessage && (message as types.TextMessage).lastUserEdit != null;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (edited)
+          Padding(
+              padding: const EdgeInsets.only(right: 2, top: 3),
+              child: Icon(
+                Icons.edit,
+                color: InheritedChatTheme.of(context).theme.primaryColor,
+                size: 12,
+              )),
         Text(
           DateFormat.jm(dateLocale).format(
             DateTime.fromMillisecondsSinceEpoch(
-              message.timestamp!,
+              edited ? (message as types.TextMessage).lastUserEdit!.millisecondsSinceEpoch : message.timestamp!,
             ),
           ),
           style: InheritedChatTheme.of(context).theme.caption.copyWith(
