@@ -259,10 +259,10 @@ class _ChatState extends State<Chat> {
                                     if (nextMessage != null && nextMessage.timestamp != null) {
                                       nextMessageDifferentDay = message.timestamp != null &&
                                           DateTime.fromMillisecondsSinceEpoch(
-                                                message.timestamp! * 1000,
+                                                message.timestamp!,
                                               ).day !=
                                               DateTime.fromMillisecondsSinceEpoch(
-                                                nextMessage.timestamp! * 1000,
+                                                nextMessage.timestamp!,
                                               ).day;
                                       nextMessageSameAuthor = nextMessage.authorId == message.authorId;
                                     }
@@ -272,7 +272,7 @@ class _ChatState extends State<Chat> {
                                       shouldRenderTime = message.timestamp != null &&
                                           previousMessage.timestamp != null &&
                                           (!previousMessageSameAuthor ||
-                                              previousMessage.timestamp! - message.timestamp! >= 60);
+                                              previousMessage.timestamp! - message.timestamp! >= 60*1000);
                                     }
 
                                     return Column(
@@ -286,7 +286,7 @@ class _ChatState extends State<Chat> {
                                             child: Text(
                                               getVerboseDateTimeRepresentation(
                                                 DateTime.fromMillisecondsSinceEpoch(
-                                                  message.timestamp! * 1000,
+                                                  message.timestamp!,
                                                 ),
                                                 widget.dateLocale,
                                                 widget.l10n.today,

@@ -148,7 +148,7 @@ class Message extends StatelessWidget {
         Text(
           DateFormat.jm(dateLocale).format(
             DateTime.fromMillisecondsSinceEpoch(
-              message.timestamp! * 1000,
+              message.timestamp!,
             ),
           ),
           style: InheritedChatTheme.of(context).theme.caption.copyWith(
