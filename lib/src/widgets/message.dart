@@ -210,11 +210,19 @@ class Message extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (messageContainerWrapperBuilder != null)
-                  messageContainerWrapperBuilder!(
-                      message, _buildMessageBubble(_borderRadius, _currentUserIsAuthor, context, _user))
-                else
-                  _buildMessageBubble(_borderRadius, _currentUserIsAuthor, context, _user),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: 52),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (messageContainerWrapperBuilder != null)
+                        messageContainerWrapperBuilder!(
+                            message, _buildMessageBubble(_borderRadius, _currentUserIsAuthor, context, _user))
+                      else
+                        _buildMessageBubble(_borderRadius, _currentUserIsAuthor, context, _user),
+                    ],
+                  ),
+                ),
                 if (shouldRenderTime)
                   Container(
                     margin: const EdgeInsets.only(
