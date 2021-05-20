@@ -27,6 +27,7 @@ class Message extends StatelessWidget {
     this.avatarData,
     required this.previousMessageDifferentAuthor,
     this.messageContainerWrapperBuilder,
+    this.statusWidgetBuilder,
   }) : super(key: key);
 
   /// Locale will be passed to the `Intl` package. Make sure you initialized
@@ -67,6 +68,9 @@ class Message extends StatelessWidget {
   /// If provided, allows you to wrap message widget with any other widget
   final Widget Function(types.Message, Widget)? messageContainerWrapperBuilder;
 
+  /// Build a custom status widget
+  final Widget Function(types.Message)? statusWidgetBuilder;
+
   Widget? get userName => avatarData?.userName;
 
   Widget? get userAvatar => avatarData?.userAvatar;
@@ -104,6 +108,9 @@ class Message extends StatelessWidget {
   }
 
   Widget _buildStatus(BuildContext context) {
+    if (statusWidgetBuilder != null) {
+      return statusWidgetBuilder!(message);
+    }
     switch (message.status) {
       case types.Status.delivered:
         return InheritedChatTheme.of(context).theme.deliveredIcon != null

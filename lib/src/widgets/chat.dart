@@ -36,6 +36,7 @@ class Chat extends StatefulWidget {
     this.avatarData,
     this.inputBuilder,
     this.noMessagesBuilder,
+    this.statusWidgetBuilder,
   }) : super(key: key);
 
   /// See [Message.dateLocale]
@@ -91,6 +92,9 @@ class Chat extends StatefulWidget {
 
   /// Build a custom no message widget
   final WidgetBuilder? noMessagesBuilder;
+
+  /// See [Message.statusWidgetBuilder]
+  final Widget Function(types.Message)? statusWidgetBuilder;
 
   @override
   _ChatState createState() => _ChatState();
@@ -314,6 +318,7 @@ class _ChatState extends State<Chat> {
                                               ? widget.avatarData![message.authorId]
                                               : null,
                                           messageContainerWrapperBuilder: widget.messageContainerWrapperBuilder,
+                                          statusWidgetBuilder: widget.statusWidgetBuilder,
                                         ),
                                       ],
                                     );
