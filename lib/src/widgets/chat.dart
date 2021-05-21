@@ -189,7 +189,8 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    final _messageWidth = min(MediaQuery.of(context).size.width * 0.7, 400).floor();
+    final _messageWidthOwn = min(MediaQuery.of(context).size.width * 0.77, 440).floor();
+    final _messageWidthOther = min(MediaQuery.of(context).size.width * 0.67, 440).floor();
 
     final galleryItems = widget.messages.fold<List<String>>([], (previousValue, element) {
       // Check if element is image message
@@ -311,7 +312,9 @@ class _ChatState extends State<Chat> {
                                           key: ValueKey(message),
                                           dateLocale: widget.dateLocale,
                                           message: message,
-                                          messageWidth: _messageWidth,
+                                          messageWidth: message.authorId == widget.user.id
+                                              ? _messageWidthOwn
+                                              : _messageWidthOther,
                                           onPreviewDataFetched: _onPreviewDataFetched,
                                           previousMessageSameAuthor: previousMessageSameAuthor,
                                           nextMessageDifferentAuthor: nextMessage?.authorId != message.authorId,
