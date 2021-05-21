@@ -217,16 +217,10 @@ class Message extends StatelessWidget {
               children: [
                 ConstrainedBox(
                   constraints: const BoxConstraints(minWidth: 52),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (messageContainerWrapperBuilder != null)
-                        messageContainerWrapperBuilder!(
-                            message, _buildMessageBubble(_borderRadius, _currentUserIsAuthor, context, _user))
-                      else
-                        _buildMessageBubble(_borderRadius, _currentUserIsAuthor, context, _user),
-                    ],
-                  ),
+                  child: (messageContainerWrapperBuilder != null)
+                      ? messageContainerWrapperBuilder!(
+                          message, _buildMessageBubble(_borderRadius, _currentUserIsAuthor, context, _user))
+                      : _buildMessageBubble(_borderRadius, _currentUserIsAuthor, context, _user),
                 ),
                 if (shouldRenderTime)
                   Container(
@@ -244,26 +238,25 @@ class Message extends StatelessWidget {
   }
 
   Container _buildMessageBubble(
-      BorderRadius _borderRadius, bool _currentUserIsAuthor, BuildContext context, types.User _user) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: _borderRadius,
-        color: !_currentUserIsAuthor || message.type == types.MessageType.image
-            ? InheritedChatTheme.of(context).theme.secondaryColor
-            : InheritedChatTheme.of(context).theme.primaryColor,
-      ),
-      child: ClipRRect(
-        borderRadius: _borderRadius,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (_user.id != message.authorId && userName != null && nextMessageDifferentAuthor) userName!,
-            _buildMessage(),
-          ],
+          BorderRadius _borderRadius, bool _currentUserIsAuthor, BuildContext context, types.User _user) =>
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: _borderRadius,
+          color: !_currentUserIsAuthor || message.type == types.MessageType.image
+              ? InheritedChatTheme.of(context).theme.secondaryColor
+              : InheritedChatTheme.of(context).theme.primaryColor,
         ),
-      ),
-    );
-  }
+        child: ClipRRect(
+          borderRadius: _borderRadius,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (_user.id != message.authorId && userName != null && nextMessageDifferentAuthor) userName!,
+              _buildMessage(),
+            ],
+          ),
+        ),
+      );
 
   Widget _showAvatarOrPlaceholder(types.User user) {
     if (user.id != message.authorId) {
