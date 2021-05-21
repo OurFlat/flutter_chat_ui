@@ -31,6 +31,7 @@ class Chat extends StatefulWidget {
     this.onPreviewDataFetched,
     this.onSendPressed,
     this.theme = const DefaultChatTheme(),
+    this.usePreviewData = true,
     required this.user,
     this.onAudioRecorded,
     this.avatarData,
@@ -80,6 +81,9 @@ class Chat extends StatefulWidget {
   /// existing one, like the [DefaultChatTheme]. You can customize only certain
   /// variables, see more here [DefaultChatTheme].
   final ChatTheme theme;
+
+  /// See [Message.usePreviewData]
+  final bool usePreviewData;
 
   /// See [InheritedUser.user]
   final types.User user;
@@ -319,6 +323,7 @@ class _ChatState extends State<Chat> {
                                               : null,
                                           messageContainerWrapperBuilder: widget.messageContainerWrapperBuilder,
                                           statusWidgetBuilder: widget.statusWidgetBuilder,
+                                          usePreviewData: widget.usePreviewData,
                                         ),
                                       ],
                                     );

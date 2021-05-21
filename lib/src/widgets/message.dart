@@ -28,6 +28,7 @@ class Message extends StatelessWidget {
     required this.previousMessageDifferentAuthor,
     this.messageContainerWrapperBuilder,
     this.statusWidgetBuilder,
+    this.usePreviewData = true,
   }) : super(key: key);
 
   /// Locale will be passed to the `Intl` package. Make sure you initialized
@@ -68,6 +69,9 @@ class Message extends StatelessWidget {
   /// If provided, allows you to wrap message widget with any other widget
   final Widget Function(types.Message, Widget)? messageContainerWrapperBuilder;
 
+  /// See [TextMessage.usePreviewData]
+  final bool usePreviewData;
+
   /// Build a custom status widget
   final Widget Function(types.Message)? statusWidgetBuilder;
 
@@ -101,6 +105,7 @@ class Message extends StatelessWidget {
         return TextMessage(
           message: textMessage,
           onPreviewDataFetched: onPreviewDataFetched,
+          usePreviewData: usePreviewData,
         );
       default:
         return Container();
